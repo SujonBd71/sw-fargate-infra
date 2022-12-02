@@ -34,16 +34,41 @@ resource "aws_subnet" "sw-priv-sub1-ecs-cidr" {
 }
 
 
-# resource "aws_route_table" "sw-public-route-table" {
-#   vpc_id = aws_vpc.sweet-home-vpc.id
-#   tags = {
-#     Name = "Public-Route-Table"
-#   }
-# }
+resource "aws_route_table" "sw-public-route-table" {
+  vpc_id = aws_vpc.sweet-home-vpc.id
+  tags = {
+    Name = "sw-public-route-table"
+  }
+}
 
-# resource "aws_route_table" "sw-private-route-table" {
-#   vpc_id = aws_vpc.sweet-home-vpc.id
-#   tags = {
-#     Name = "Private-Route-Table"
-#   }
-# }
+resource "aws_route_table" "sw-private-route-table" {
+  vpc_id = aws_vpc.sweet-home-vpc.id
+  tags = {
+    Name = "sw-private-route-table"
+  }
+}
+
+
+resource "aws_route_table_association" "sw-public-route-1-association" {
+  route_table_id = aws_route_table.sw-public-route-table.id
+  subnet_id      = aws_subnet.sw-pub-sub1-ecs-cidr.id
+}
+
+resource "aws_route_table_association" "sw-private-route-1-association" {
+  route_table_id = aws_route_table.sw-private-route-table.id
+  subnet_id      = aws_subnet.sw-priv-sub1-ecs-cidr.id
+}
+
+
+resource "aws_internet_gateway" "sweethome-igw" {
+  vpc_id = aws_vpc.sweet-home-vpc.id
+  tags = {
+    Name = "sweethome-IGW"
+  }
+}
+
+resource "aws_route" "sw-public-internet-igw-route" {
+  route_table_id         = aws_route_table.sw-public-route-table.id
+  gateway_id             = aws_internet_gateway.sweethome-igw.id
+  destination_cidr_block = "0.0.0.0/0"
+}
