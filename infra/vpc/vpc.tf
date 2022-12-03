@@ -2,6 +2,12 @@ provider "aws" {
   region = var.region
 }
 
+terraform {
+  backend "s3" {}
+}
+
+
+
 
 resource "aws_vpc" "sweet-home-vpc" {
   cidr_block           = var.sw_vpc_cidr
