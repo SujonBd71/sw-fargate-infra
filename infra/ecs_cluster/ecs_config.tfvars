@@ -1,9 +1,6 @@
 # remote state
-# remote_state_key = "PROD/infrastructure.tfstate"
-# remote_state_bucket = "YOUR_S3_BUCKET"
-
-#local state
-local_state-key="vpc/terraform.tfstate"
+remote_state_key = "sw-vpc.tfstate"
+remote_state_bucket = "sw-vpc-tf-state"
 
 
 ecs_domain_name = "sweethomecloud.com"
