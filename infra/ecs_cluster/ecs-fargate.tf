@@ -58,64 +58,64 @@ resource "aws_alb_target_group" "sw-ecs_default_target_group" {
   }
 }
 
-# resource "aws_route53_record" "ecs_load_balancer_record" {
-#   name = "*.${var.ecs_domain_name}"
-#   type = "A"
-#   zone_id = data.aws_route53_zone.ecs_domain.zone_id
+resource "aws_route53_record" "sw-ecs_load_balancer_record" {
+  name = "*.${var.ecs_domain_name}"
+  type = "A"
+  zone_id = data.aws_route53_zone.ecs_domain.zone_id
 
-#   alias {
-#     evaluate_target_health  = false
-#     name                    = aws_alb.ecs_cluster_alb.dns_name
-#     zone_id                 = aws_alb.ecs_cluster_alb.zone_id
-#   }
-# }
+  alias {
+    evaluate_target_health  = false
+    name                    = aws_alb.sw-ecs_cluster_alb.dns_name
+    zone_id                 = aws_alb.sw-ecs_cluster_alb.zone_id
+  }
+}
 
-# resource "aws_iam_role" "ecs_cluster_role" {
-#   name = "${var.ecs_cluster_name}-IAM-Role"
+resource "aws_iam_role" "sw-ecs_cluster_role" {
+  name = "${var.ecs_cluster_name}-IAM-Role"
 
-#   assume_role_policy = <<EOF
-# {
-# "Version": "2012-10-17",
-# "Statement": [
-#  {
-#    "Effect": "Allow",
-#    "Principal": {
-#      "Service": ["ecs.amazonaws.com", "ec2.amazonaws.com", "application-autoscaling.amazonaws.com"]
-#    },
-#    "Action": "sts:AssumeRole"
-#   }
-#   ]
-#  }
-# EOF
-# }
+  assume_role_policy = <<EOF
+{
+"Version": "2012-10-17",
+"Statement": [
+ {
+   "Effect": "Allow",
+   "Principal": {
+     "Service": ["ecs.amazonaws.com", "ec2.amazonaws.com", "application-autoscaling.amazonaws.com"]
+   },
+   "Action": "sts:AssumeRole"
+  }
+  ]
+ }
+EOF
+}
 
-# resource "aws_iam_role_policy" "ecs_cluster_policy" {
-#   name = "${var.ecs_cluster_name}-IAM-Role"
-#   role = aws_iam_role.ecs_cluster_role.id
+resource "aws_iam_role_policy" "sw-ecs_cluster_policy" {
+  name = "${var.ecs_cluster_name}-IAM-Role"
+  role = aws_iam_role.sw-ecs_cluster_role.id
 
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Action": [
-#         "ecs:*",
-#         "ec2:*",
-#         "elasticloadbalancing:*",
-#         "ecr:*",
-#         "dynamodb:*",
-#         "cloudwatch:*",
-#         "s3:*",
-#         "rds:*",
-#         "sqs:*",
-#         "sns:*",
-#         "logs:*",
-#         "ssm:*"
-#       ],
-#       "Resource": "*"
-#     }
-#   ]
-# }
-# EOF
-# }
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:*",
+        "ec2:*",
+        "elasticloadbalancing:*",
+        "ecr:*",
+        "dynamodb:*",
+        "cloudwatch:*",
+        "s3:*",
+        "rds:*",
+        "sqs:*",
+        "sns:*",
+        "logs:*",
+        "ssm:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
